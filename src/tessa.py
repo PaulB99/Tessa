@@ -150,7 +150,7 @@ def write_text(formatted_text):
 
 
 if __name__ == "__main__":
-    image = cv2.imread('../data/image-asset.jpeg') # Read image
+    image = cv2.imread('../data/example3.jpg') # Read image
     thresholds_image = pre_processing(image) # Preprocess
     parsed_data = parse_text(thresholds_image) # Get text
     accuracy_threshold = 30 # Threshold to draw box
