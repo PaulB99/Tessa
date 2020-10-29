@@ -93,6 +93,7 @@ def func():
 import csv
 import cv2
 import pytesseract
+import string
 
 # Takes image and performs pre-processing
 def pre_processing(image):
@@ -100,9 +101,9 @@ def pre_processing(image):
     blur = cv2.GaussianBlur(gray, (3,3), 0)
     thresh = cv2.threshold(blur, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
 
-    cv2.imshow('threshold image', thresh)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    #cv2.imshow('threshold image', thresh)
+    #cv2.waitKey(0)
+    #cv2.destroyAllWindows()
     return thresh
 
 # Feeds to tesseract to predict text, returns metadata dict
@@ -124,9 +125,9 @@ def draw_boxes(image, details, threshold_point):
             image = cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)
             
     # Display image
-    cv2.imshow('captured text', image)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    #cv2.imshow('captured text', image)
+    #cv2.waitKey(0)
+    #cv2.destroyAllWindows()
 
 # Arrange text into appropriate format
 def format_text(details):
@@ -134,6 +135,7 @@ def format_text(details):
     word_list = []
     last_word = ''
     for word in details['text']:
+        word = word.translate(str.maketrans('','', string.punctuation)) # Remove punctuation
         if word != '':
             word_list.append(word)
             last_word = word
@@ -143,6 +145,20 @@ def format_text(details):
 
     return parse_text
 
+# Remove noise in text
+def clarify(text):
+    new = []
+    for t in range(len(text)):
+        if text[t]: # Remove empty ones
+            maxlen = 0
+            mainword = ''
+            for x in text[t]: # Only leave longest word
+                if len(x) > maxlen:
+                    maxlen = len(x)
+                    mainword = x
+            new.append(mainword)
+    return new
+
 # Write text to file
 def write_text(formatted_text):
     with open('../data/output/result_text.txt', 'w', newline="") as file:
@@ -150,10 +166,13 @@ def write_text(formatted_text):
 
 
 if __name__ == "__main__":
-    image = cv2.imread('../data/example3.jpg') # Read image
+    #image = cv2.imread('../data/image-asset.jpeg') # Read image
+    image = cv2.imread('../data/example3.jpg')
     thresholds_image = pre_processing(image) # Preprocess
     parsed_data = parse_text(thresholds_image) # Get text
     accuracy_threshold = 30 # Threshold to draw box
     draw_boxes(thresholds_image, parsed_data, accuracy_threshold) # Draw boxes
     arranged_text = format_text(parsed_data) # Format text
-    write_text(arranged_text) # Write to file
+    clarified_text = clarify(arranged_text)
+    print(clarified_text)
+    #write_text(arranged_text) # Write to file
