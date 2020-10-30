@@ -95,6 +95,10 @@ import cv2
 import pytesseract
 import string
 
+# Recognise spines from video
+def get_spines(url):
+    print('a')
+
 # Takes image and performs pre-processing
 def pre_processing(image):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -176,3 +180,7 @@ if __name__ == "__main__":
     clarified_text = clarify(arranged_text)
     print(clarified_text)
     #write_text(arranged_text) # Write to file
+    
+    # TODO: More accurate recognition - check out google papers
+    # TODO: Does the API need a 100% accurate input or can it infer?
+    
