@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import glob as gb
 
-img_width = 600
+img_width = 1000
 img_height = 450
 
 
@@ -163,7 +163,7 @@ def seg_horizontal(img):
 
 
 def main():
-    img_path = gb.glob("../data/example4.jpg")
+    img_path = gb.glob("../data/example5.jpg")
     for path in img_path:
         img_gray, img = pre_process(path)
         edges = cv2.Canny(img, 50, 150, apertureSize=3)
@@ -179,10 +179,10 @@ def main():
             # img_s = seg_horizontal(img_s)
             str1 = path[6:]
             str1 = str1[:-4]
-            string = '../results/' + str(i) + '.jpg'
+            string = '../data/results/' + str(i) + '.jpg'
             print("Write " + string)
             cv2.imwrite(string, img_s)  # 保持切割后的图像
-            i = i+1
-        cv2.imshow("result", img_show)
-        cv2.waitKey()
+            i +=1
+        #cv2.imshow("result", img_show)
+        #cv2.waitKey()
 main()
