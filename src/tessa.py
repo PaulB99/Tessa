@@ -93,6 +93,7 @@ from matplotlib import pyplot as plt
 import numpy as np
 import scipy.ndimage
 import scipy.stats
+import image_processing
 
 # A line object 
 class Line(object):
@@ -187,7 +188,7 @@ def get_lines(img, angles = [0], spaces = ['h']):
         cutoff = np.max(proc_img)/12.
         for i in range(20):
             cutoff = i*.01
-            bright_pixel_ratio = len(np.where(img > cutoff)[0])/(proc_img.shape[0]*proc_img.shape[1])
+            bright_pixel_ratio = len(np.where(proc_img > cutoff)[0])/(proc_img.shape[0]*proc_img.shape[1])
             if bright_pixel_ratio <= 0.4:
                 break
 
@@ -224,7 +225,7 @@ def get_lines(img, angles = [0], spaces = ['h']):
         
         # Un-rotate image
         proc_img = scipy.ndimage.rotate(proc_img, angle = -1*angle, reshape = False)
-        proc_img.resize((img.shape[0], img.shape[1]))
+        proc_img.resize((proc_img.shape[0], proc_img.shape[1]))
         final_img = final_img + proc_img
         
         # Conver the final image to binary
@@ -237,7 +238,7 @@ def get_lines(img, angles = [0], spaces = ['h']):
         # Get the lines from the label
         lines = get_lines_from_img(final_img, levels)
         
-        return lines
+    return lines
 
 
 # Removes short lines
@@ -407,8 +408,8 @@ if __name__ == "__main__":
     
     imgpath = '../data/example5.jpg'
     img = cv2.imread(imgpath)
-    lines = get_lines(img)
-    
+    #lines = get_lines(img)
+    lines = image_processing.get_book_lines(img)
     
     '''
     grey = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
