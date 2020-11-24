@@ -84,7 +84,6 @@ def downsample(img, num_downsamples):
     return proc_img
 
 # Calculate sobel x^2
-
 def sobel_x_squared(img):
     
     proc_img = cv2.Sobel(img, cv2.CV_64F, 1, 0, ksize = -1)**2.
@@ -215,7 +214,7 @@ def get_lines_from_img(img, levels):
     return lines
 
 # Get edges of spines in image
-def get_book_lines(img, angles = [0], spaces = ['h'], debug = True):
+def get_book_lines(img, angles = [0], spaces = ['h']):
 
     # Convert to HSV
     gs_img = np.mean(img, axis = 2)
