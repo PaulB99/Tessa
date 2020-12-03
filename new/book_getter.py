@@ -13,7 +13,8 @@ def google_search(search_term, api_key, cse_id):
       cx=cse_id,
     ).execute()
     return res
-    
+ 
+# Takes a sentence and returns a json from isbndb   
 def run(sent):
     # Keys
     f = open("../data/se_id.txt", "r")
@@ -26,12 +27,11 @@ def run(sent):
     url = ''
     for element in result['items']:
         link = element['link']
-        if 'amazon.com' in link:
+        if 'goodreads.com' in link:
             url = link
             break
     
     # Break out if not found
-    print(url)
     if url == '':
         print('FAILURE 1') #TODO: Make it better
         return 'FAIL'
@@ -39,12 +39,14 @@ def run(sent):
     isbn = ''
     page = req.get(url)
     soup = BeautifulSoup(page.content, 'html.parser')
-    nums = soup.find_all('span', class_="a-list-item")
-    print(nums)
+    nums = soup.find_all('span', itemprop='isbn')
+    isbn = nums[0].get_text()
+    print(isbn)
+    '''
     for n in nums:
         nu = str(n)
-        if nu.isnumeric() and len(nu) == 10:
-            isbn = n
+        if len(nu) == 10:
+            isbn = n '''
     
     # Break out if not found
     if isbn == '':
@@ -59,10 +61,7 @@ def run(sent):
     # Prepare request
     #resp = req.get("https://api2.isbndb.com/book/9781934759486", headers=h)
     request = 'https://api2.isbndb.com/book/' + isbn
-    print(request)
     
     resp = req.get(request, headers=h)
-    print(resp)
-    print(resp.json())
+    return (resp.json(), isbn)
 
-run('Das Kapital')

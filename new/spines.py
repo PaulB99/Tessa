@@ -58,14 +58,9 @@ def run(img_path):
     books = []
 
     for spine in spines:
-        book_info = {}
-
         # Get query
-        search_query = spine.sentence
+        query = spine.sentence
+        books.append(query)
         
-        print(search_query)
-        
-    # Finally, return
     return books
 
-run('../data/example5.jpg')

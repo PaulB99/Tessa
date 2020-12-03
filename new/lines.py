@@ -299,9 +299,3 @@ def get_book_lines(img, angles = [0], spaces = ['h']):
 
     return lines
 
-
-if __name__ == "__main__":
-    imgpath = '../data/example5.jpg'
-    img = cv2.imread(imgpath)
-    lines = get_book_lines(img)
-
